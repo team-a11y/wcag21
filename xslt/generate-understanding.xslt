@@ -30,7 +30,6 @@
 	</xsl:template>
 	
 	<xsl:template match="guidelines">
-		<xsl:message><xsl:value-of select="$base.dir"/></xsl:message>
 		<xsl:apply-templates select="//guideline | //success-criterion"/>
 	</xsl:template>
 	

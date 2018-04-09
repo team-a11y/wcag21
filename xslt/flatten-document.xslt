@@ -14,9 +14,9 @@
 	
 	<xsl:template match="element()[@data-include]">
 		<xsl:choose>
-			<xsl:when test="@data-include-replace = 'true'"><xsl:value-of select="unparsed-text(resolve-uri(@data-include, $base))" disable-output-escaping="yes"/></xsl:when>
+			<xsl:when test="@data-include-replace = 'true'"><xsl:value-of select="unparsed-text(resolve-uri(@data-include, $base.dir))" disable-output-escaping="yes"/></xsl:when>
 			<xsl:otherwise>
-				<xsl:copy><xsl:value-of select="unparsed-text(resolve-uri(@data-include, $base))" disable-output-escaping="yes"/></xsl:copy>
+				<xsl:copy><xsl:value-of select="unparsed-text(resolve-uri(@data-include, $base.dir))" disable-output-escaping="yes"/></xsl:copy>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>

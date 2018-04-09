@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- This is a build file for Apache ant (http://ant.apache.org/). This has been tested with Ant 1.7. -->
 <project name="wcag21" basedir="." default="usage">
-
+	
 	<description>Generate WCAG 2.1 and related documents</description>
 	
 	<!-- Load overriding properties -->
@@ -9,7 +9,8 @@
 	
 	<!-- The following properties need to be set appropriately before doing a build - they should all be overridden by the above property file, but are kept here to serve as defaults -->
 	<property name="outputdir" location="." description="Directory within which the output folders are created, normally &quot;../YYYY&quot; unless doing TR in which case it is &quot;../../../TR/&lt;YYYY&gt;&quot;"/>
-
+	<property name="uri.prefix" value="file:///" description="Prefix if any that must be prepended to URIs to make it resolve on the platform"/>
+	
 	<property name="xslt.factory" value="net.sf.saxon.TransformerFactoryImpl" description="Class name of the XSLT transformer factory, which sets which XSLT engine to use; must be an XSLT 2.0 processor"/>
 	
 	<!-- The following properties usually do not need to be adjusted -->
@@ -23,22 +24,21 @@
 	
 	<target name="usage">
 		<echo level="info">Usage: &quot;ant &lt;target&gt;&quot; to execute a build task
-Enter &quot;ant -projecthelp&quot; to get list of available build tasks</echo>
+			Enter &quot;ant -projecthelp&quot; to get list of available build tasks</echo>
 	</target>
 	
-	<target name="init">
-		<makeurl file="${basedir}" property="base.dir"/>
-	</target>
-
+	<target name="init"></target>
+	
 	<target name="clean" description="Clean up any temp files">
 		<delete file="${inputdir.guidelines}/index-flat.html" failonerror="false"/>
 		<delete file="${inputdir.guidelines}/wcag21.xml" failonerror="false"/>
 	</target>
 	
 	<target name="flatten" depends="init" description="Build a copy of guidelines with all data-include files incorporated">
+		<makeurl file="${basedir}/guidelines/" property="base.guidelines"/>
 		<xslt in="${inputdir.guidelines}/index.html" out="${inputdir.guidelines}/index-flat.html" style="xslt/flatten-document.xslt">
 			<factory name="${xslt.factory}"/>
-			<param name="base.dir" expression="${base.dir}guidelines/"/>
+			<param name="base" expression="${base.guidelines}"/>
 		</xslt>
 	</target>
 	
@@ -50,16 +50,18 @@ Enter &quot;ant -projecthelp&quot; to get list of available build tasks</echo>
 	
 	<!-- Understanding -->
 	<target name="generate-understanding" depends="guidelines-xml">
-		<mkdir dir="${outputdir.understanding}"/>
-		<xslt in="${inputdir.guidelines}/wcag21.xml" out="${outputdir.understanding}/output.html" style="xslt/generate-understanding.xslt" force="true">
+		<makeurl file="${basedir}/understanding/" property="base.understanding"/>
+		<mkdir dir="${basedir}/output/"/>
+		<makeurl file="${basedir}/output/" property="output.dir"/>
+		<xslt in="${inputdir.guidelines}/wcag21.xml" out="${output.dir}output.html" style="xslt/generate-understanding.xslt" force="true">
 			<factory name="${xslt.factory}"/>
-			<param name="base.dir" expression="${base.dir}understanding/"/>
-			<param name="output.dir" expression="${base.dir}output"/>
+			<param name="base.dir" expression="${base.understanding}"/>
+			<param name="output.dir" expression="${output.dir}"/>
 		</xslt>
 	</target>
 	
 	<target name="understanding" depends="generate-understanding, clean" description="Generate formatted Understanding docs"></target>
-
+	
 	<!-- Everything -->
 	<target name="all" depends="init" description="Generate entire suite"/>
 	
