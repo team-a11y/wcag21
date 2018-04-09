@@ -9,7 +9,6 @@
 	
 	<!-- The following properties need to be set appropriately before doing a build - they should all be overridden by the above property file, but are kept here to serve as defaults -->
 	<property name="outputdir" location="." description="Directory within which the output folders are created, normally &quot;../YYYY&quot; unless doing TR in which case it is &quot;../../../TR/&lt;YYYY&gt;&quot;"/>
-	<property name="uri.prefix" value="file:///" description="Prefix if any that must be prepended to URIs to make it resolve on the platform"/>
 
 	<property name="xslt.factory" value="net.sf.saxon.TransformerFactoryImpl" description="Class name of the XSLT transformer factory, which sets which XSLT engine to use; must be an XSLT 2.0 processor"/>
 	
@@ -27,7 +26,9 @@
 Enter &quot;ant -projecthelp&quot; to get list of available build tasks</echo>
 	</target>
 	
-	<target name="init"></target>
+	<target name="init">
+		<makeurl file="${basedir}" property="base.dir"/>
+	</target>
 
 	<target name="clean" description="Clean up any temp files">
 		<delete file="${inputdir.guidelines}/index-flat.html" failonerror="false"/>
@@ -35,10 +36,9 @@ Enter &quot;ant -projecthelp&quot; to get list of available build tasks</echo>
 	</target>
 	
 	<target name="flatten" depends="init" description="Build a copy of guidelines with all data-include files incorporated">
-		<makeurl file="${basedir}/guidelines/" property="base"/>
 		<xslt in="${inputdir.guidelines}/index.html" out="${inputdir.guidelines}/index-flat.html" style="xslt/flatten-document.xslt">
 			<factory name="${xslt.factory}"/>
-			<param name="base" expression="${base}"/>
+			<param name="base.dir" expression="${base.dir}guidelines/"/>
 		</xslt>
 	</target>
 	
@@ -51,21 +51,10 @@ Enter &quot;ant -projecthelp&quot; to get list of available build tasks</echo>
 	<!-- Understanding -->
 	<target name="generate-understanding" depends="guidelines-xml">
 		<mkdir dir="${outputdir.understanding}"/>
-		<xslt in="${source.understanding}" out="${outputdir.understanding}/complete.html" style="sources/diffspec-howto.xsl" force="true">
-			<factory name="net.sf.saxon.TransformerFactoryImpl">
-				<attribute name="http://saxon.sf.net/feature/xinclude-aware" value="true"/>
-			</factory>
-			<param name="show.diff.markup" expression="0"/>
-			<param name="show.issue.links" expression="0"/>
-			<param name="show.ednotes" expression="${ednotes}" if="${ednotes}"/>
-			<param name="glthisversion" expression="${guidelines.uri}" if="guidelines.uri"/>
-			<param name="guidethisversion" expression=""/>
-			<param name="techsthisversion" expression="${techniques.uri}" if="techniques.uri"/>
-			<param name="guidelines.file" expression="file:///${source.guidelines}"/>
-			<param name="understanding.file" expression="file:///${source.understanding}"/>
-			<param name="techniques.file" expression="file:///${source.techniques}"/>
-			<param name="quickref.file" expression="file:///${source.quickref}"/>
-			<param name="refs.file" expression="file:///${source.refs}"/>
+		<xslt in="${inputdir.guidelines}/wcag21.xml" out="${outputdir.understanding}/output.html" style="xslt/generate-understanding.xslt" force="true">
+			<factory name="${xslt.factory}"/>
+			<param name="base.dir" expression="${base.dir}understanding/"/>
+			<param name="output.dir" expression="${base.dir}output"/>
 		</xslt>
 	</target>
 	

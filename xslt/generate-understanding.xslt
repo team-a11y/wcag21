@@ -7,8 +7,8 @@
 	exclude-result-prefixes="#all"
 	version="2.0">
 	
-	<xsl:param name="base">file:///C:/Documents/code/GitHub/w3c/wcag21/understanding/</xsl:param>
-	<xsl:param name="output.dir">output</xsl:param>
+	<xsl:param name="base.dir">understanding/</xsl:param>
+	<xsl:param name="output.dir">output/</xsl:param>
 	
 	<xsl:function name="wcag:isheading" as="xs:boolean">
 		<xsl:param name="el"/>
@@ -30,6 +30,7 @@
 	</xsl:template>
 	
 	<xsl:template match="guidelines">
+		<xsl:message><xsl:value-of select="$base.dir"/></xsl:message>
 		<xsl:apply-templates select="//guideline | //success-criterion"/>
 	</xsl:template>
 	
@@ -40,8 +41,9 @@
 				<xsl:when test="version = 'WCAG21'">21/</xsl:when>
 			</xsl:choose>
 		</xsl:variable>
+		<xsl:message><xsl:value-of select="@id"/></xsl:message>
 		<xsl:result-document href="{$output.dir}/{file/@href}" encoding="utf-8" exclude-result-prefixes="#all" indent="yes" method="xml" omit-xml-declaration="yes">
-			<xsl:apply-templates select="document(resolve-uri(file/@href, concat($base, $subpath)))">
+			<xsl:apply-templates select="document(resolve-uri(file/@href, concat($base.dir, $subpath)))">
 				<xsl:with-param name="meta" select="." tunnel="yes"/>
 			</xsl:apply-templates>
 		</xsl:result-document>
@@ -55,9 +57,10 @@
 	
 	<xsl:template match="html:html">
 		<xsl:param name="meta" tunnel="yes"/>
+		<xsl:variable name="lang" select="$meta/ancestor::guidelines/@lang"/>
 		<xsl:text disable-output-escaping="yes"><![CDATA[<!DOCTYPE html>
 ]]></xsl:text>
-		<html>
+		<html lang="{$lang}" xml:lang="{$lang}">
 			<head>
 				<meta charset="UTF-8" />
 				<xsl:apply-templates select="//html:title"/>
