@@ -29,6 +29,25 @@
 		<xsl:value-of select="$type"/><xsl:text> </xsl:text><xsl:value-of select="$meta/num"/><xsl:text>: </xsl:text><xsl:value-of select="$meta/name"/>
 	</xsl:template>
 	
+	<xsl:template name="navigation">
+		<xsl:param name="meta" tunnel="yes"/>
+		<ul id="navigation">
+			<li><a href="." title="Table of Contents">Contents</a></li>
+			<xsl:choose>
+				<xsl:when test="name($meta) = 'guideline'">
+					<xsl:if test="$meta/preceding-sibling::guideline"><li><a href="{$meta/preceding-sibling::guideline[1]/file/@href}">Previous <abbr title="Guideline">GL</abbr>: <xsl:value-of select="$meta/preceding-sibling::guideline[1]/name"/></a></li></xsl:if>
+					<li><a href="{$meta/success-criterion[1]/file/@href}">First <abbr title="Success Criterion">SC</abbr>: <xsl:value-of select="$meta/success-criterion[1]/name"/></a></li>
+					<xsl:if test="$meta/following-sibling::guideline"><li><a href="{$meta/following-sibling::guideline[1]/file/@href}">Next <abbr title="Guideline">GL</abbr>: <xsl:value-of select="$meta/following-sibling::guideline[1]/name"/></a></li></xsl:if>
+				</xsl:when>
+				<xsl:when test="name($meta) = 'success-criterion'">
+					<li><a href="{$meta/parent::guideline[1]/file/@href}"><abbr title="Guideline">GL</abbr>: <xsl:value-of select="$meta/parent::guideline[1]/name"/></a></li>
+					<xsl:if test="$meta/preceding-sibling::success-criterion"><li><a href="{$meta/preceding-sibling::success-criterion[1]/file/@href}">Previous <abbr title="Success Criterion">SC</abbr>: <xsl:value-of select="$meta/preceding-sibling::success-criterion[1]/name"/></a></li></xsl:if>
+					<xsl:if test="$meta/following-sibling::success-criterion"><li><a href="{$meta/following-sibling::success-criterion[1]/file/@href}">Next <abbr title="Success Criterion">SC</abbr>: <xsl:value-of select="$meta/following-sibling::success-criterion[1]/name"/></a></li></xsl:if>
+				</xsl:when>
+			</xsl:choose>
+		</ul>
+	</xsl:template>
+	
 	<xsl:template match="guidelines">
 		<xsl:apply-templates select="//guideline | //success-criterion"/>
 	</xsl:template>
@@ -67,12 +86,17 @@
 				<link rel="stylesheet" type="text/css" href="understanding.css" />
 			</head>
 			<body>
+				<nav>
+					<xsl:call-template name="navigation"/>
+				</nav>
 				<xsl:apply-templates select="//html:h1"/>
 				<blockquote class="scquote"><xsl:copy-of select="$meta/content/html:*"/></blockquote>
-				<xsl:apply-templates select="//html:section[@id = 'intent']"/>
-				<xsl:apply-templates select="//html:section[@id = 'benefits']"/>
-				<xsl:apply-templates select="//html:section[@id = 'examples']"/>
-				<xsl:apply-templates select="//html:section[@id = 'techniques']"/>
+				<main>
+					<xsl:apply-templates select="//html:section[@id = 'intent']"/>
+					<xsl:apply-templates select="//html:section[@id = 'benefits']"/>
+					<xsl:apply-templates select="//html:section[@id = 'examples']"/>
+					<xsl:apply-templates select="//html:section[@id = 'techniques']"/>
+				</main>
 			</body>
 		</html>
 	</xsl:template>

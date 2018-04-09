@@ -9,7 +9,6 @@ code {
 h3.section, h3.terms {font-weight: normal; margin-top: 1.5em; color: #000000; background: inherit;}
 h4 {font-weight: bold; margin-bottom: 0; color: #333; background: inherit;}
 
-
 .boxed {border: solid #ccc 1px; padding: 0 0 1em; margin: 1em 2em 0 2em}
 .boxed p {margin-left: 1em; margin-right: 1em}
 .boxed div {margin-left: 0.5em;}
@@ -163,15 +162,6 @@ div.sc div.note p.prefix {
 
 span.screenreader {position: absolute; left: -10000px}
 
-/* tabbed styles - repeated here to keep cover sheets consistent with /TR/ style */
-  
-  #navigationbottom {padding: .5em 0 0 0; margin: 2em 0 10px 0; border-top: 2px solid #778; float: right; width: 100%;} /* top, right, bottom, left */
-  #navigationbottom li {list-style: none; margin: 0; display: inline; font-size: 0.75em; float: left}
-  #navigationbottom li a {padding: 3px 0.5em; margin-left: 3px; border: 1px solid #778; background: #dde; text-decoration: none; float: left}
-  #navigationbottom li a:link {color: #404040}
-  #navigationbottom li a:visited {color: #404040}
-  #navigationbottom li a:hover, #navigationbottom li a:focus, #navigationbottom li a:active {color: #000; background: #aae; border-color: #227; float: left}
-  
   div.footer {margin-top: 1em;}   
 
   div.toc hr {display:block;}
@@ -209,3 +199,16 @@ p.sctxt {
     margin: 0.5em 0 0 0.5em;
     padding: 0;
     }
+
+/* tabbed styles - repeated here to keep cover sheets consistent with /TR/ style */
+  /* Navigation styles originally from Eric Meyer */
+/* http://www.complexspiral.com/events/archive/2003/seybold/cssnav.html */
+/* Revised by Liam McGee */
+/* tabbed styles */
+#navigation, #navigationbottom {padding: 3px 0 0.5em 0; margin: 0 0.25em 0; border-bottom: 2px solid #778; float: left; width: 100%; clear: both;}
+#navigation li, #navigationbottom li {list-style: none; margin: 0; display: inline; float: left; font-size: 0.8125em;}
+#navigation li a, #navigationbottom li a {padding: 3px 0.5em; margin-left: 3px; border: 1px solid #778; background: #dde; text-decoration: none; float: left}
+#navigation li a:link, #navigationbottom li a:link {color: #404040}
+#navigation li a:visited, #navigationbottom li a:visited {color: #404040}
+#navigation li a:hover, #navigationbottom li a:hover, #navigation li a:focus, #navigation li a:active {color: #000; background: #aae; border-color: #227; float: left}
+  
