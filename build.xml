@@ -32,6 +32,8 @@
 	<target name="clean" description="Clean up any temp files">
 		<delete file="${inputdir.guidelines}/index-flat.html" failonerror="false"/>
 		<delete file="${inputdir.guidelines}/wcag21.xml" failonerror="false"/>
+		<delete file="output.html" failonerror="false"/>
+		<delete dir="output" failonerror="false"/>
 	</target>
 	
 	<target name="flatten" depends="init" description="Build a copy of guidelines with all data-include files incorporated">
@@ -53,11 +55,13 @@
 		<makeurl file="${basedir}/understanding/" property="base.understanding"/>
 		<mkdir dir="${basedir}/output/"/>
 		<makeurl file="${basedir}/output/" property="output.dir"/>
-		<xslt in="${inputdir.guidelines}/wcag21.xml" out="${output.dir}output.html" style="xslt/generate-understanding.xslt" force="true">
+		<echo message="${output.dir}"/>
+		<xslt in="${inputdir.guidelines}/wcag21.xml" out="output.html" style="xslt/generate-understanding.xslt" force="true">
 			<factory name="${xslt.factory}"/>
 			<param name="base.dir" expression="${base.understanding}"/>
 			<param name="output.dir" expression="${output.dir}"/>
 		</xslt>
+		<copy file="understanding/understanding.css" todir="output/"/>
 	</target>
 	
 	<target name="understanding" depends="generate-understanding, clean" description="Generate formatted Understanding docs"></target>
