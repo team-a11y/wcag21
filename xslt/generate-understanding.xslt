@@ -95,6 +95,7 @@
 					<xsl:apply-templates select="//html:section[@id = 'intent']"/>
 					<xsl:apply-templates select="//html:section[@id = 'benefits']"/>
 					<xsl:apply-templates select="//html:section[@id = 'examples']"/>
+					<xsl:apply-templates select="//html:section[@id = 'resources']"/>
 					<xsl:apply-templates select="//html:section[@id = 'techniques']"/>
 				</main>
 			</body>
@@ -127,6 +128,13 @@
 		</xsl:copy>
 	</xsl:template>
 	
+	<xsl:template match="html:section[@id = 'resources']">
+		<xsl:copy>
+			<h2>Resources <xsl:call-template name="name"/></h2>
+			<xsl:apply-templates select="html:*[not(wcag:isheading(.))]"/>
+		</xsl:copy>
+	</xsl:template>
+	
 	<xsl:template match="html:section[@id = 'techniques']">
 		<xsl:copy>
 			<h2>Techniques for <xsl:call-template name="name"/></h2>
@@ -154,5 +162,7 @@
 			<xsl:apply-templates select="html:*[not(wcag:isheading(.))]"/>
 		</xsl:copy>
 	</xsl:template>
+	
+	<xsl:template match="html:*[@class = 'instructions']"/>
 	
 </xsl:stylesheet>
