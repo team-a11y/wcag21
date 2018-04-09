@@ -35,14 +35,28 @@
 			<li><a href="." title="Table of Contents">Contents</a></li>
 			<xsl:choose>
 				<xsl:when test="name($meta) = 'guideline'">
-					<xsl:if test="$meta/preceding-sibling::guideline"><li><a href="{$meta/preceding-sibling::guideline[1]/file/@href}">Previous <abbr title="Guideline">GL</abbr>: <xsl:value-of select="$meta/preceding-sibling::guideline[1]/name"/></a></li></xsl:if>
+					<xsl:choose>
+						<xsl:when test="$meta/preceding-sibling::guideline"><li><a href="{$meta/preceding-sibling::guideline[1]/file/@href}">Previous <abbr title="Guideline">GL</abbr>: <xsl:value-of select="$meta/preceding-sibling::guideline[1]/name"/></a></li></xsl:when>
+						<xsl:when test="$meta/parent::principle/preceding-sibling::principle"><li><a href="{$meta/parent::principle/preceding-sibling::principle[1]/guideline[last()]/file/@href}">Previous <abbr title="Guideline">GL</abbr>: <xsl:value-of select="$meta/parent::principle/preceding-sibling::principle[1]/guideline[last()]/name"/></a></li></xsl:when>
+					</xsl:choose>
 					<li><a href="{$meta/success-criterion[1]/file/@href}">First <abbr title="Success Criterion">SC</abbr>: <xsl:value-of select="$meta/success-criterion[1]/name"/></a></li>
-					<xsl:if test="$meta/following-sibling::guideline"><li><a href="{$meta/following-sibling::guideline[1]/file/@href}">Next <abbr title="Guideline">GL</abbr>: <xsl:value-of select="$meta/following-sibling::guideline[1]/name"/></a></li></xsl:if>
+					<xsl:choose>
+						<xsl:when test="$meta/following-sibling::guideline"><li><a href="{$meta/following-sibling::guideline[1]/file/@href}">Next <abbr title="Guideline">GL</abbr>: <xsl:value-of select="$meta/following-sibling::guideline[1]/name"/></a></li></xsl:when>
+						<xsl:when test="$meta/parent::principle/following-sibling::principle"><li><a href="{$meta/parent::principle/following-sibling::principle[1]/guideline[1]/file/@href}">Next <abbr title="Guideline">GL</abbr>: <xsl:value-of select="$meta/parent::principle/following-sibling::principle[1]/guideline[1]/name"/></a></li></xsl:when>
+					</xsl:choose>
 				</xsl:when>
 				<xsl:when test="name($meta) = 'success-criterion'">
 					<li><a href="{$meta/parent::guideline[1]/file/@href}"><abbr title="Guideline">GL</abbr>: <xsl:value-of select="$meta/parent::guideline[1]/name"/></a></li>
-					<xsl:if test="$meta/preceding-sibling::success-criterion"><li><a href="{$meta/preceding-sibling::success-criterion[1]/file/@href}">Previous <abbr title="Success Criterion">SC</abbr>: <xsl:value-of select="$meta/preceding-sibling::success-criterion[1]/name"/></a></li></xsl:if>
-					<xsl:if test="$meta/following-sibling::success-criterion"><li><a href="{$meta/following-sibling::success-criterion[1]/file/@href}">Next <abbr title="Success Criterion">SC</abbr>: <xsl:value-of select="$meta/following-sibling::success-criterion[1]/name"/></a></li></xsl:if>
+					<xsl:choose>
+						<xsl:when test="$meta/preceding-sibling::success-criterion"><li><a href="{$meta/preceding-sibling::success-criterion[1]/file/@href}">Previous <abbr title="Success Criterion">SC</abbr>: <xsl:value-of select="$meta/preceding-sibling::success-criterion[1]/name"/></a></li></xsl:when>
+						<xsl:when test="$meta/parent::guideline/preceding-sibling::guideline"><li><a href="{$meta/parent::guideline/preceding-sibling::guideline[1]/success-criterion[1]/file/@href}">Previous <abbr title="Success Criterion">SC</abbr>: <xsl:value-of select="$meta/ancestor::principle/preceding-sibling::principle[1]/guideline[1]/success-criterion[1]/name"/></a></li></xsl:when>
+						<xsl:when test="$meta/ancestor::principle/preceding-sibling::principle"><li><a href="{$meta/parent::guideline/preceding-sibling::guideline[1]/success-criterion[last()]/file/@href}">Previous <abbr title="Success Criterion">SC</abbr>: <xsl:value-of select="$meta/parent::guideline/preceding-sibling::guideline[1]/success-criterion[last()]/name"/></a></li></xsl:when>
+					</xsl:choose>
+					<xsl:choose>
+						<xsl:when test="$meta/following-sibling::success-criterion"><li><a href="{$meta/following-sibling::success-criterion[1]/file/@href}">Next <abbr title="Success Criterion">SC</abbr>: <xsl:value-of select="$meta/following-sibling::success-criterion[1]/name"/></a></li></xsl:when>
+						<xsl:when test="$meta/parent::guideline/following-sibling::guideline"><li><a href="{$meta/parent::guideline/following-sibling::guideline[1]/success-criterion[1]/file/@href}">Next <abbr title="Success Criterion">SC</abbr>: <xsl:value-of select="$meta/parent::guideline/following-sibling::guideline[1]/success-criterion[1]/name"/></a></li></xsl:when>
+						<xsl:when test="$meta/ancestor::principle/following-sibling::principle"><li><a href="{$meta/ancestor::principle/following-sibling::principle[1]/guideline[1]/success-criterion[1]/file/@href}">Next <abbr title="Success Criterion">SC</abbr>: <xsl:value-of select="$meta/ancestor::principle/following-sibling::principle[1]/guideline[1]/success-criterion[1]/name"/></a></li></xsl:when>
+					</xsl:choose>
 				</xsl:when>
 			</xsl:choose>
 		</ul>
