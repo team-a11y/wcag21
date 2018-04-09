@@ -61,7 +61,7 @@
 		<guideline>
 			<xsl:call-template name="id"/>
 			<xsl:call-template name="version"/>
-			<num><xsl:number level="multiple" count="html:section[@class='principle']|html:section[@class='guideline']" format="1.1"/></num>
+			<num><xsl:number level="multiple" count="html:section[@class='principle']|html:section[@class='guideline' or @class = 'guideline new']" format="1.1"/></num>
 			<name><xsl:value-of select="wcag:find-heading(.)"/></name>
 			<xsl:call-template name="content"/>
 			<file href="{wcag:generate-id(wcag:find-heading(.))}.html"/>
@@ -73,7 +73,7 @@
 		<success-criterion>
 			<xsl:call-template name="id"/>
 			<xsl:call-template name="version"/>
-			<num><xsl:number level="multiple" count="html:section[@class='principle']|html:section[@class='guideline']|html:section[@class='sc' or @class='sc new']" format="1.1.1"/></num>
+			<num><xsl:number level="multiple" count="html:section[@class='principle']|html:section[@class='guideline' or @class = 'guideline new']|html:section[@class='sc' or @class='sc new']" format="1.1.1"/></num>
 			<name><xsl:value-of select="wcag:find-heading(.)"/></name>
 			<xsl:call-template name="content"/>
 			<level><xsl:value-of select="html:p[@class='conformance-level']"/></level>
